@@ -6,8 +6,11 @@ use App\Models\Enquiry;
 use App\Models\Faq;
 use App\Models\Project;
 use App\Models\Service;
+use App\Models\SiteSetting;
 use App\Http\Requests\StoreEnquiryRequest;
+use App\Mail\NewEnquiryNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class WebsiteController extends Controller
 {
@@ -68,7 +71,15 @@ class WebsiteController extends Controller
             'user_agent' => $request->userAgent(),
         ]);
 
-        // TODO: Send email notification (will be implemented in later step)
+        // Send email notification
+        try {
+            $siteSettings = SiteSetting::current();
+            $recipientEmail = $siteSettings->email ?? config('mail.from.address');
+            Mail::to($recipientEmail)->send(new NewEnquiryNotification($enquiry));
+        } catch (\Exception $e) {
+            // Log error but don't fail the submission
+            \Log::error('Failed to send enquiry email: ' . $e->getMessage());
+        }
 
         return response()->json([
             'success' => true,
