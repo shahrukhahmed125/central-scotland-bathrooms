@@ -7,10 +7,12 @@ use App\Models\Enquiry;
 use App\Models\Faq;
 use App\Models\GalleryContent;
 use App\Models\HomepageContent;
+use App\Models\PrivacyContent;
 use App\Models\Project;
 use App\Models\Service;
 use App\Models\ServicesContent;
 use App\Models\SiteSetting;
+use App\Models\TermsContent;
 use App\Http\Requests\StoreEnquiryRequest;
 use App\Mail\NewEnquiryNotification;
 use Illuminate\Http\Request;
@@ -99,11 +101,13 @@ class WebsiteController extends Controller
 
     public function privacy()
     {
-        return view('pages.privacy');
+        $privacyContent = PrivacyContent::current();
+        return view('pages.privacy', compact('privacyContent'));
     }
 
     public function terms()
     {
-        return view('pages.terms');
+        $termsContent = TermsContent::current();
+        return view('pages.terms', compact('termsContent'));
     }
 }
