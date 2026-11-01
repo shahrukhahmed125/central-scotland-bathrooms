@@ -1,6 +1,22 @@
 @extends('layouts.app')
 
-@section('title', 'Services | Scotland Bathrooms')
+@section('title', $servicesContent->meta_title ?: 'Services | Scotland Bathrooms')
+@if(!empty($servicesContent->meta_description))
+@section('meta_description', $servicesContent->meta_description)
+@endif
+@if(!empty($servicesContent->meta_keywords))
+@section('meta_keywords', $servicesContent->meta_keywords)
+@endif
+@if(!empty($servicesContent->og_title))
+@section('og_title', $servicesContent->og_title)
+@endif
+@if(!empty($servicesContent->og_description))
+@section('og_description', $servicesContent->og_description)
+@endif
+@if(!empty($servicesContent->og_image))
+@section('og_image', asset('storage/' . $servicesContent->og_image))
+@section('twitter_image', asset('storage/' . $servicesContent->og_image))
+@endif
 
 @section('css')
 
@@ -13,8 +29,8 @@
   <div class="container page-hero__grid">
     <div class="page-hero__copy">
       <nav aria-label="Breadcrumb"><ol class="crumbs"><li><a href="{{ route('home') }}">Home</a></li><li aria-current="page">Services</li></ol></nav>
-      <h1 id="page-title">Bathroom refits, from <span class="nowrap">strip-out</span> to <span class="nowrap">sign-off</span>.</h1>
-      <p class="lead">Wet wall and tiled bathrooms across Central Scotland, handled by one team that keeps you updated every day.</p>
+      <h1 id="page-title">{{ $servicesContent->hero_title }}</h1>
+      <p class="lead">{{ $servicesContent->hero_lead }}</p>
     </div>
     <div class="samples" aria-hidden="true">
       <span style="--c:#24918a;--i:0"></span><span style="--c:#ff7759;--i:1"></span><span style="--c:#a9ddd2;--i:2"></span>
@@ -27,8 +43,8 @@
 <section class="section" aria-labelledby="included-title">
   <div class="container">
     <div class="section-head" data-reveal>
-      <h2 id="included-title">What every job includes</h2>
-      <p class="lead">You deal with one team from the day the old bathroom comes out to the day you sign off the new one.</p>
+      <h2 id="included-title">{{ $servicesContent->services_title }}</h2>
+      <p class="lead">{{ $servicesContent->services_lead }}</p>
     </div>
     <div class="bento">
       @forelse($services as $service)
@@ -90,10 +106,10 @@
 <section class="section section--flush-top" aria-labelledby="ribbon-title">
   <div class="container">
     <div class="ribbon" data-reveal>
-      <p class="ribbon__amount" aria-hidden="true">£0</p>
+      <p class="ribbon__amount" aria-hidden="true">{{ $servicesContent->guarantee_amount }}</p>
       <div>
-        <h2 id="ribbon-title">No fitting cost to pay until you're happy with the whole job.</h2>
-        <p>Check the finished bathroom first. If anything isn't right, we put it right before you pay for the fitting.</p>
+        <h2 id="ribbon-title">{{ $servicesContent->guarantee_title }}</h2>
+        <p>{{ $servicesContent->guarantee_lead }}</p>
       </div>
       <a class="btn btn--brand" href="tel:{{ preg_replace('/[^0-9]/', '', $siteSettings->phone ?? '+447549348636') }}">Call {{ $siteSettings->phone ?? '+44 7549 348636' }} <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span></a>
     </div>
@@ -103,8 +119,8 @@
 <section class="section section--flush-top faq" id="faq" aria-labelledby="faq-title">
   <div class="container faq__grid">
     <div class="faq__intro" data-reveal>
-      <h2 id="faq-title">Questions people ask</h2>
-      <p class="lead">Straight answers about how a bathroom refit with us works.</p>
+      <h2 id="faq-title">{{ $servicesContent->faq_title }}</h2>
+      <p class="lead">{{ $servicesContent->faq_lead }}</p>
       @if($faqs->count() > 0)
         <p class="faq__updated">Last updated <time datetime="{{ $faqs->max('updated_at')->format('Y-m-d') }}">{{ $faqs->max('updated_at')->format('j F Y') }}</time></p>
       @endif
@@ -127,8 +143,18 @@
     <div class="cta-band on-dark" data-reveal>
       <svg class="cta-band__art" viewBox="0 0 400 240" aria-hidden="true" focusable="false"><rect width="400" height="240" fill="#d6e8e3"/><rect class="bt" x="1.5" y="1.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:170"/><rect class="bt" x="41.5" y="1.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:192"/><rect class="bt" x="81.5" y="1.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:214"/><rect class="bt" x="121.5" y="1.5" width="37" height="37" rx="3" fill="#24918A" style="--d:236"/><rect class="bt" x="161.5" y="1.5" width="37" height="37" rx="3" fill="#1A6E68" style="--d:258"/><rect class="bt" x="201.5" y="1.5" width="37" height="37" rx="3" fill="#24918A" style="--d:280"/><rect class="bt" x="241.5" y="1.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:302"/><rect class="bt" x="281.5" y="1.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:324"/><rect class="bt" x="321.5" y="1.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:346"/><rect class="bt" x="361.5" y="1.5" width="37" height="37" rx="3" fill="#24918A" style="--d:368"/><rect class="bt" x="1.5" y="41.5" width="37" height="37" rx="3" fill="#3AA99C" style="--d:136"/><rect class="bt" x="41.5" y="41.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:158"/><rect class="bt" x="81.5" y="41.5" width="37" height="37" rx="3" fill="#24918A" style="--d:180"/><rect class="bt" x="121.5" y="41.5" width="37" height="37" rx="3" fill="#2C9C92" style="--d:202"/><rect class="bt" x="161.5" y="41.5" width="37" height="37" rx="3" fill="#24918A" style="--d:224"/><rect class="bt" x="201.5" y="41.5" width="37" height="37" rx="3" fill="#24918A" style="--d:246"/><rect class="bt" x="241.5" y="41.5" width="37" height="37" rx="3" fill="#1A6E68" style="--d:268"/><rect class="bt" x="281.5" y="41.5" width="37" height="37" rx="3" fill="#2C9C92" style="--d:290"/><rect class="bt" x="321.5" y="41.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:312"/><rect class="bt" x="361.5" y="41.5" width="37" height="37" rx="3" fill="#24918A" style="--d:334"/><rect class="bt" x="1.5" y="81.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:102"/><rect class="bt" x="41.5" y="81.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:124"/><rect class="bt" x="81.5" y="81.5" width="37" height="37" rx="3" fill="#3AA99C" style="--d:146"/><rect class="bt" x="121.5" y="81.5" width="37" height="37" rx="3" fill="#24918A" style="--d:168"/><rect class="bt" x="161.5" y="81.5" width="37" height="37" rx="3" fill="#24918A" style="--d:190"/><rect class="bt" x="201.5" y="81.5" width="37" height="37" rx="3" fill="#1A6E68" style="--d:212"/><rect class="bt" x="241.5" y="81.5" width="37" height="37" rx="3" fill="#9AD6CA" style="--d:234"/><rect class="bt" x="281.5" y="81.5" width="37" height="37" rx="3" fill="#1A6E68" style="--d:256"/><rect class="bt" x="321.5" y="81.5" width="37" height="37" rx="3" fill="#3AA99C" style="--d:278"/><rect class="bt" x="361.5" y="81.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:300"/><rect class="bt" x="1.5" y="121.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:68"/><rect class="bt" x="41.5" y="121.5" width="37" height="37" rx="3" fill="#24918A" style="--d:90"/><rect class="bt" x="81.5" y="121.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:112"/><rect class="bt" x="121.5" y="121.5" width="37" height="37" rx="3" fill="#24918A" style="--d:134"/><rect class="bt" x="161.5" y="121.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:156"/><rect class="bt" x="201.5" y="121.5" width="37" height="37" rx="3" fill="#2C9C92" style="--d:178"/><rect class="bt" x="241.5" y="121.5" width="37" height="37" rx="3" fill="#2C9C92" style="--d:200"/><rect class="bt" x="281.5" y="121.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:222"/><rect class="bt" x="321.5" y="121.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:244"/><rect class="bt" x="361.5" y="121.5" width="37" height="37" rx="3" fill="#9AD6CA" style="--d:266"/><rect class="bt" x="1.5" y="161.5" width="37" height="37" rx="3" fill="#24918A" style="--d:34"/><rect class="bt" x="41.5" y="161.5" width="37" height="37" rx="3" fill="#2C9C92" style="--d:56"/><rect class="bt" x="81.5" y="161.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:78"/><rect class="bt" x="121.5" y="161.5" width="37" height="37" rx="3" fill="#1A6E68" style="--d:100"/><rect class="bt" x="161.5" y="161.5" width="37" height="37" rx="3" fill="#2C9C92" style="--d:122"/><rect class="bt" x="201.5" y="161.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:144"/><rect class="bt" x="241.5" y="161.5" width="37" height="37" rx="3" fill="#3AA99C" style="--d:166"/><rect class="bt" x="281.5" y="161.5" width="37" height="37" rx="3" fill="#1A6E68" style="--d:188"/><rect class="bt" x="321.5" y="161.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:210"/><rect class="bt" x="361.5" y="161.5" width="37" height="37" rx="3" fill="#24918A" style="--d:232"/><rect class="bt" x="1.5" y="201.5" width="37" height="37" rx="3" fill="#24918A" style="--d:0"/><rect class="bt" x="41.5" y="201.5" width="37" height="37" rx="3" fill="#2C9C92" style="--d:22"/><rect class="bt" x="81.5" y="201.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:44"/><rect class="bt" x="121.5" y="201.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:66"/><rect class="bt" x="161.5" y="201.5" width="37" height="37" rx="3" fill="#1A6E68" style="--d:88"/><rect class="bt" x="201.5" y="201.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:110"/><rect class="bt" x="241.5" y="201.5" width="37" height="37" rx="3" fill="#7FCABD" style="--d:132"/><rect class="bt" x="281.5" y="201.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:154"/><rect class="bt" x="321.5" y="201.5" width="37" height="37" rx="3" fill="#9AD6CA" style="--d:176"/><rect class="bt" x="361.5" y="201.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:198"/></svg>
       <div class="cta-band__copy">
-        <h2 id="cta-title">Talk to Robert about your bathroom.</h2>
-        <p class="lead">Fitting wet wall and tiled bathrooms across Central Scotland since <span class="since">2019</span>.</p>
+        <h2 id="cta-title">{{ $servicesContent->cta_title ?? 'Talk to Robert about your bathroom.' }}</h2>
+        @php
+          $sinceYear = $servicesContent->since_year ?? 2019;
+          $ctaLead = $servicesContent->cta_lead ?? 'Fitting wet wall and tiled bathrooms across Central Scotland since ' . $sinceYear . '.';
+          $sinceBadge = '<span class="since" data-count="' . e($sinceYear) . '" data-from="1989">' . e($sinceYear) . '</span>';
+          if (str_contains($ctaLead, (string)$sinceYear)) {
+              $ctaLeadHtml = str_replace((string)$sinceYear, $sinceBadge, e($ctaLead));
+          } else {
+              $ctaLeadHtml = e($ctaLead) . ' ' . $sinceBadge;
+          }
+        @endphp
+        <p class="lead">{!! $ctaLeadHtml !!}</p>
       </div>
       <div class="cta-band__actions">
         <a class="btn btn--primary" href="tel:{{ preg_replace('/[^0-9]/', '', $siteSettings->phone ?? '+447549348636') }}">Call {{ $siteSettings->phone ?? '+44 7549 348636' }} <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span></a>

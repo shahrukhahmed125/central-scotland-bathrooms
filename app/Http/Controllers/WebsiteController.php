@@ -7,6 +7,7 @@ use App\Models\Faq;
 use App\Models\HomepageContent;
 use App\Models\Project;
 use App\Models\Service;
+use App\Models\ServicesContent;
 use App\Models\SiteSetting;
 use App\Http\Requests\StoreEnquiryRequest;
 use App\Mail\NewEnquiryNotification;
@@ -31,7 +32,9 @@ class WebsiteController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        return view('pages.services', compact('services', 'faqs'));
+        $servicesContent = ServicesContent::current();
+
+        return view('pages.services', compact('services', 'faqs', 'servicesContent'));
     }
 
     public function gallery()
