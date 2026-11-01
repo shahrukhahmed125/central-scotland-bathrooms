@@ -1803,6 +1803,18 @@ label {
   height: 1.5rem;
 }
 
+.cell__icon--orange {
+  color: var(--coral-500);
+}
+
+.cell__icon--coral {
+  color: var(--coral-400);
+}
+
+.cell__icon--brand {
+  color: var(--teal-200);
+}
+
 .cell__art {
   margin: calc(clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem) * -1) calc(clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem) * -1) var(--s-4);
   height: 11rem;

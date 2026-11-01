@@ -46,8 +46,8 @@
       "alternateName": "Central Scotland Bathroom Consultancy",
       "description": "Wet wall and tiled bathroom fitting across Central Scotland since 2019, including strip-out, fitting and rubbish removal, with daily updates and the fitting cost paid once the customer is happy.",
       "url": "https://centralscotlandbathrooms.co.uk/",
-      "telephone": "+447549348636",
-      "email": "info@centralscotlandbathrooms.co.uk",
+      "telephone": "{{ $siteSettings->phone ?? '+447549348636' }}",
+      "email": "{{ $siteSettings->email ?? 'info@centralscotlandbathrooms.co.uk' }}",
       "foundingDate": "2019",
       "founder": {
         "@type": "Person",
@@ -194,9 +194,9 @@
           </li>
       </ul>
     </nav>
-    <a class="btn btn--primary btn--sm nav-call" href="tel:+447549348636" aria-label="Call +44 7549 348636">
+    <a class="btn btn--primary btn--sm nav-call" href="tel:{{ $siteSettings->phone ?? '+447549348636' }}" aria-label="Call {{ $siteSettings->phone ?? '+44 7549 348636' }}">
       <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>
-      <span class="nav-call__long">Call +44 7549 348636</span><span class="nav-call__short">Call</span>
+      <span class="nav-call__long">Call {{ $siteSettings->phone ?? '+44 7549 348636' }}</span><span class="nav-call__short">Call</span>
     </a>
     <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
       <span class="menu-toggle__bar"></span><span class="menu-toggle__bar"></span><span class="menu-toggle__bar"></span>
@@ -213,8 +213,8 @@
     </ul>
   </nav>
   <div class="mobile-menu__actions" style="--i:4">
-    <a class="btn btn--primary" href="tel:+447549348636">Call +44 7549 348636 <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span></a>
-    <a class="btn btn--wa" href="https://wa.me/447549348636?text=Hi%20Robert%2C%20I%E2%80%99d%20like%20to%20talk%20about%20a%20new%20bathroom." target="_blank" rel="noopener">WhatsApp Robert <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg></span></a>
+    <a class="btn btn--primary" href="tel:{{ $siteSettings->phone ?? '+447549348636' }}">Call {{ $siteSettings->phone ?? '+44 7549 348636' }} <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span></a>
+    <a class="btn btn--wa" href="https://wa.me/{{ str_replace(['+', ' '], '', $siteSettings->whatsapp ?? '447549348636') }}?text=Hi%20Robert%2C%20I%E2%80%99d%20like%20to%20talk%20about%20a%20new%20bathroom." target="_blank" rel="noopener">WhatsApp Robert <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg></span></a>
   </div>
 </div>
 
@@ -242,9 +242,9 @@
       <div>
         <h2 class="footer__title">Get in touch</h2>
         <ul class="footer__list">
-          <li><a href="tel:+447549348636"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>+44 7549 348636</a></li>
-          <li><a href="https://wa.me/447549348636?text=Hi%20Robert%2C%20I%E2%80%99d%20like%20to%20talk%20about%20a%20new%20bathroom." target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg>WhatsApp Robert</a></li>
-          <li><a href="mailto:info@centralscotlandbathrooms.co.uk?subject=Bathroom%20enquiry"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg><span>info@<wbr>centralscotland<wbr>bathrooms.co.uk</span></a></li>
+          <li><a href="tel:{{ $siteSettings->phone ?? '+447549348636' }}"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>{{ $siteSettings->phone ?? '+44 7549 348636' }}</a></li>
+          <li><a href="https://wa.me/{{ str_replace(['+', ' '], '', $siteSettings->whatsapp ?? '447549348636') }}?text=Hi%20Robert%2C%20I%E2%80%99d%20like%20to%20talk%20about%20a%20new%20bathroom." target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg>WhatsApp Robert</a></li>
+          <li><a href="mailto:{{ $siteSettings->email ?? 'info@centralscotlandbathrooms.co.uk' }}?subject=Bathroom%20enquiry"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg><span>{{ $siteSettings->email ?? 'info@centralscotlandbathrooms.co.uk' }}</span></a></li>
         </ul>
       </div>
       <div>
@@ -261,7 +261,7 @@
     </div>
   </div>
 </footer>
-<a class="wa-float" href="https://wa.me/447549348636?text=Hi%20Robert%2C%20I%E2%80%99d%20like%20to%20talk%20about%20a%20new%20bathroom." target="_blank" rel="noopener" aria-label="WhatsApp Robert (opens in a new tab)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg></a>
+<a class="wa-float" href="https://wa.me/{{ str_replace(['+', ' '], '', $siteSettings->whatsapp ?? '447549348636') }}?text=Hi%20Robert%2C%20I%E2%80%99d%20like%20to%20talk%20about%20a%20new%20bathroom." target="_blank" rel="noopener" aria-label="WhatsApp Robert (opens in a new tab)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg></a>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
 @yield('js')

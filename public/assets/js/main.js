@@ -3,13 +3,6 @@
 (function ($) {
   'use strict';
 
-  // Contact details used by the enquiry form. Update these in one place.
-  var CONTACT = {
-    phoneDisplay: '+44 7549 348636',
-    email: 'info@centralscotlandbathrooms.co.uk',
-    whatsapp: '447549348636'
-  };
-
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   var hasIO = 'IntersectionObserver' in window;
 
@@ -183,12 +176,12 @@
     io.observe($compare[0]);
   }
 
-  /* Enquiry form: validate, then open email or WhatsApp with the details filled in */
+  /* Enquiry form: validate, then submit to server via AJAX */
   function initForm() {
     var $form = $('[data-enquiry]');
     if (!$form.length) { return; }
     var $status = $form.find('[data-form-status]');
-    var method = 'email';
+    var $submitBtn = $form.find('button[type="submit"]');
 
     var rules = {
       name: function (v) { return v ? '' : 'Enter your name.'; },
@@ -220,32 +213,6 @@
       });
     });
 
-    $form.find('[data-send]').on('click', function () {
-      method = $(this).attr('data-send');
-    });
-
-    function value(name) {
-      return $.trim($form.find('[name="' + name + '"]').val() || '');
-    }
-
-    function buildMessage() {
-      var type = $form.find('[name="bathroom"]:checked').val() || 'Not sure yet';
-      var lines = [
-        'Bathroom enquiry from the website',
-        '',
-        'Name: ' + value('name'),
-        'Phone: ' + value('phone')
-      ];
-      if (value('email')) { lines.push('Email: ' + value('email')); }
-      lines.push('Town or postcode: ' + value('town'));
-      lines.push('Bathroom type: ' + type);
-      lines.push('Best time to call: ' + (value('time') || 'Any time'));
-      if (value('message')) {
-        lines.push('', 'About the bathroom:', value('message'));
-      }
-      return lines.join('\r\n');
-    }
-
     $form.on('submit', function (e) {
       e.preventDefault();
       $status.removeClass('is-error is-ok').text('');
@@ -261,20 +228,30 @@
         return;
       }
 
-      var body = buildMessage();
-      if (method === 'whatsapp') {
-        var waUrl = 'https://wa.me/' + CONTACT.whatsapp + '?text=' + encodeURIComponent(body);
-        var win = window.open(waUrl, '_blank', 'noopener');
-        if (!win) { window.location.href = waUrl; }
-        $status.addClass('is-ok').text('WhatsApp is opening with your details. Press send in WhatsApp to message Robert.');
-      } else {
-        var subject = 'Bathroom enquiry: ' + value('name') + ', ' + value('town');
-        window.location.href = 'mailto:' + CONTACT.email +
-          '?subject=' + encodeURIComponent(subject) +
-          '&body=' + encodeURIComponent(body);
-        $status.addClass('is-ok').text('Your email app is opening with your details. Press send there. If nothing opens, email ' +
-          CONTACT.email + ' or call ' + CONTACT.phoneDisplay + '.');
-      }
+      // Disable submit button and show loading state
+      $submitBtn.prop('disabled', true).text('Sending...');
+
+      // Submit form via AJAX
+      var formData = new FormData($form[0]);
+
+      $.ajax({
+        url: $form.attr('action'),
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          $status.removeClass('is-error').addClass('is-ok').text(response.message);
+          $form[0].reset();
+        },
+        error: function(xhr) {
+          var message = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Something went wrong. Please try again.';
+          $status.removeClass('is-ok').addClass('is-error').text(message);
+        },
+        complete: function() {
+          $submitBtn.prop('disabled', false).text('Send enquiry');
+        }
+      });
     });
   }
 

@@ -26,7 +26,7 @@
       <p class="prose__meta">Last updated <time datetime="2026-10-14">14 October 2026</time></p>
       <h2>Who we are</h2>
       <p>This website belongs to Central Scotland Bathroom Consultancy Ltd (“we”, “us”). We fit wet wall and tiled bathrooms across Central Scotland. We are responsible for any personal information you give us through this website or when you contact us.</p>
-      <p>You can reach us by phone on <a href="tel:+447549348636">+44 7549 348636</a> or by email at <a href="mailto:info@centralscotlandbathrooms.co.uk?subject=Bathroom%20enquiry">info@<wbr>centralscotland<wbr>bathrooms.co.uk</a>.</p>
+      <p>You can reach us by phone on <a href="tel:{{ $siteSettings->phone ?? '+447549348636' }}">{{ $siteSettings->phone ?? '+44 7549 348636' }}</a> or by email at <a href="mailto:{{ $siteSettings->email ?? 'info@centralscotlandbathrooms.co.uk' }}?subject=Bathroom%20enquiry">{{ $siteSettings->email ?? 'info@centralscotlandbathrooms.co.uk' }}</a>.</p>
       <h2>What information we collect</h2>
       <p>We only collect the information you choose to give us when you get in touch. This can include:</p>
       <ul>

@@ -40,7 +40,7 @@
       <h2>Law</h2>
       <p>These terms are governed by the law of Scotland, and the Scottish courts deal with any dispute about them.</p>
       <h2>Contact us</h2>
-      <p>If you have a question about these terms, call <a href="tel:+447549348636">+44 7549 348636</a> or email <a href="mailto:info@centralscotlandbathrooms.co.uk?subject=Bathroom%20enquiry">info@<wbr>centralscotland<wbr>bathrooms.co.uk</a>.</p>
+      <p>If you have a question about these terms, call <a href="tel:{{ $siteSettings->phone ?? '+447549348636' }}">{{ $siteSettings->phone ?? '+44 7549 348636' }}</a> or email <a href="mailto:{{ $siteSettings->email ?? 'info@centralscotlandbathrooms.co.uk' }}?subject=Bathroom%20enquiry">{{ $siteSettings->email ?? 'info@centralscotlandbathrooms.co.uk' }}</a>.</p>
     </article>
   </div>
 </section>

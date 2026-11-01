@@ -24,9 +24,9 @@
     <div class="contact__side" data-reveal>
       <h2>Talk to Robert directly</h2>
       <ul class="channels">
-        <li><a class="channel channel--call" href="tel:+447549348636"><span class="channel__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span><span class="channel__text"><span class="channel__label">Call</span><span class="channel__value">+44 7549 348636</span></span><svg class="icon channel__go" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></li>
-        <li><a class="channel channel--wa" href="https://wa.me/447549348636?text=Hi%20Robert%2C%20I%E2%80%99d%20like%20to%20talk%20about%20a%20new%20bathroom." target="_blank" rel="noopener"><span class="channel__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg></span><span class="channel__text"><span class="channel__label">WhatsApp</span><span class="channel__value">WhatsApp Robert</span></span><svg class="icon channel__go" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></li>
-        <li><a class="channel" href="mailto:info@centralscotlandbathrooms.co.uk?subject=Bathroom%20enquiry"><span class="channel__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg></span><span class="channel__text"><span class="channel__label">Email</span><span class="channel__value channel__value--email">info@<wbr>centralscotland<wbr>bathrooms.co.uk</span></span><svg class="icon channel__go" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></li>
+        <li><a class="channel channel--call" href="tel:{{ preg_replace('/[^0-9]/', '', $siteSettings->phone ?? '+447549348636') }}"><span class="channel__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span><span class="channel__text"><span class="channel__label">Call</span><span class="channel__value">{{ $siteSettings->phone ?? '+44 7549 348636' }}</span></span><svg class="icon channel__go" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></li>
+        <li><a class="channel channel--wa" href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings->whatsapp ?? '+447549348636') }}?text=Hi%20Robert%2C%20I%E2%80%99d%20like%20to%20talk%20about%20a%20new%20bathroom." target="_blank" rel="noopener"><span class="channel__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg></span><span class="channel__text"><span class="channel__label">WhatsApp</span><span class="channel__value">WhatsApp Robert</span></span><svg class="icon channel__go" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></li>
+        <li><a class="channel" href="mailto:{{ $siteSettings->email ?? 'info@centralscotlandbathrooms.co.uk' }}?subject=Bathroom%20enquiry"><span class="channel__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg></span><span class="channel__text"><span class="channel__label">Email</span><span class="channel__value channel__value--email">{{ $siteSettings->email ?? 'info@centralscotlandbathrooms.co.uk' }}</span></span><svg class="icon channel__go" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></li>
       </ul>
       <div class="area">
         <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pin"/></svg>
@@ -37,8 +37,10 @@
     <div class="form-card bezel" id="quote" data-reveal style="--i:1">
       <div class="bezel__core">
         <h2>Ask for a quote</h2>
-        <p class="form-card__intro">Fill in a few details. When you press send, your email app or WhatsApp opens with everything filled in, ready for you to send to Robert.</p>
-        <form class="form" data-enquiry novalidate>
+        <p class="form-card__intro">Fill in a few details and we'll be in touch to discuss your bathroom project.</p>
+        <form class="form" action="{{ route('contact.submit') }}" method="POST" data-enquiry novalidate>
+          @csrf
+          <input type="text" name="website" style="display:none;" tabindex="-1" autocomplete="off">
           <div class="form__row">
             <div class="field">
               <label for="name">Your name</label>
@@ -66,14 +68,14 @@
           <fieldset class="field choices">
             <legend>Type of bathroom</legend>
             <div class="choices__row">
-              <label class="choice"><input type="radio" name="bathroom" value="Wet wall"><span>Wet wall</span></label>
-              <label class="choice"><input type="radio" name="bathroom" value="Tiled"><span>Tiled</span></label>
-              <label class="choice"><input type="radio" name="bathroom" value="Not sure yet" checked><span>Not sure yet</span></label>
+              <label class="choice"><input type="radio" name="bathroom_type" value="Wet wall"><span>Wet wall</span></label>
+              <label class="choice"><input type="radio" name="bathroom_type" value="Tiled"><span>Tiled</span></label>
+              <label class="choice"><input type="radio" name="bathroom_type" value="Not sure yet" checked><span>Not sure yet</span></label>
             </div>
           </fieldset>
           <div class="field">
-            <label for="time">Best time to call</label>
-            <select id="time" name="time">
+            <label for="best_time_to_call">Best time to call</label>
+            <select id="best_time_to_call" name="best_time_to_call">
               <option>Any time</option>
               <option>Morning</option>
               <option>Afternoon</option>
@@ -87,10 +89,9 @@
           </div>
           <p class="form__status" data-form-status role="status" aria-live="polite"></p>
           <div class="form__actions">
-            <button class="btn btn--primary" type="submit" data-send="email">Send by email <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg></span></button>
-            <button class="btn btn--wa" type="submit" data-send="whatsapp">Send by WhatsApp <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg></span></button>
+            <button class="btn btn--primary" type="submit">Send enquiry <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg></span></button>
           </div>
-          <p class="form__note">Nothing is sent or stored by this website. Your details go from your own email app or WhatsApp straight to Robert.</p>
+          <p class="form__note">Prefer to call or message directly? Use the contact options above.</p>
         </form>
       </div>
     </div>

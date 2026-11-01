@@ -15,7 +15,7 @@
       <h1 class="hero__title" id="hero-title" style="--i:0">A new bathroom, without the worry.</h1>
       <p class="lead hero__lead" style="--i:1">Wet wall and tiled bathrooms across Central Scotland. Daily updates from Robert, and you pay the fitting once you’re happy.</p>
       <div class="btn-row hero__actions" style="--i:2">
-        <a class="btn btn--primary" href="tel:+447549348636">Call +44 7549 348636 <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span></a>
+        <a class="btn btn--primary" href="tel:{{ $siteSettings->phone ?? '+447549348636' }}">Call {{ $siteSettings->phone ?? '+44 7549 348636' }} <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span></a>
         <a class="btn btn--ghost" href="{{ route('services') }}">Our services <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></span></a>
       </div>
     </div>
@@ -217,8 +217,8 @@
         <p class="lead">Fitting wet wall and tiled bathrooms across Central Scotland since <span class="since" data-count="2019" data-from="1989">2019</span>.</p>
       </div>
       <div class="cta-band__actions">
-        <a class="btn btn--primary" href="tel:+447549348636">Call +44 7549 348636 <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span></a>
-        <a class="btn btn--wa" href="https://wa.me/447549348636?text=Hi%20Robert%2C%20I%E2%80%99d%20like%20to%20talk%20about%20a%20new%20bathroom." target="_blank" rel="noopener">WhatsApp Robert <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg></span></a>
+        <a class="btn btn--primary" href="tel:{{ $siteSettings->phone ?? '+447549348636' }}">Call {{ $siteSettings->phone ?? '+44 7549 348636' }} <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span></a>
+        <a class="btn btn--wa" href="https://wa.me/{{ str_replace(['+', ' '], '', $siteSettings->whatsapp ?? '447549348636') }}?text=Hi%20Robert%2C%20I%E2%80%99d%20like%20to%20talk%20about%20a%20new%20bathroom." target="_blank" rel="noopener">WhatsApp Robert <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg></span></a>
         <a class="btn btn--ghost" href="{{ route('contact') }}#quote">Ask for a quote <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></span></a>
       </div>
     </div>

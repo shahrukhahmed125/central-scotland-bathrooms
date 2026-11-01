@@ -27,204 +27,47 @@
       <h2 id="gallery-title" class="sr-only">Gallery filters</h2>
       <div class="gallery-filters" role="group" aria-label="Filter projects by type">
         <button class="gallery-filter btn btn--ghost" data-filter="all" aria-pressed="true">All Projects</button>
-        <button class="gallery-filter btn btn--ghost" data-filter="wet-wall" aria-pressed="false">Wet Wall Bathrooms</button>
-        <button class="gallery-filter btn btn--ghost" data-filter="tiled" aria-pressed="false">Tiled Bathrooms</button>
-        <button class="gallery-filter btn btn--ghost" data-filter="shower" aria-pressed="false">Shower Rooms</button>
+        @php
+          $categories = $projects->pluck('category')->unique()->sort();
+          $categoryLabels = [
+            'wet-wall' => 'Wet Wall Bathrooms',
+            'tiled' => 'Tiled Bathrooms',
+            'shower' => 'Shower Rooms',
+          ];
+        @endphp
+        @foreach($categories as $category)
+          <button class="gallery-filter btn btn--ghost" data-filter="{{ $category }}" aria-pressed="false">{{ $categoryLabels[$category] ?? ucfirst($category) }}</button>
+        @endforeach
       </div>
     </div>
 
     <div class="gallery-grid" data-gallery>
-      <article class="gallery-item" data-category="wet-wall" data-reveal style="--i:0">
-        <button class="gallery-item__trigger" aria-label="View larger image of Contemporary Wet Wall Bathroom">
-          <div class="gallery-item__image">
-            <img src="{{ asset('assets/images/image-1.jpeg') }}" alt="Contemporary wet wall bathroom installation" loading="lazy">
+      @forelse($projects as $index => $project)
+        @php
+          $categoryLabels = [
+            'wet-wall' => 'Wet Wall',
+            'tiled' => 'Tiled',
+            'shower' => 'Shower Room',
+          ];
+          $categoryLabel = $categoryLabels[$project->category] ?? ucfirst($project->category);
+        @endphp
+        <article class="gallery-item {{ $project->is_featured ? 'gallery-item--featured' : '' }}" data-category="{{ $project->category }}" data-reveal style="--i:{{ $index }}">
+          <button class="gallery-item__trigger" aria-label="View larger image of {{ $project->title }}">
+            <div class="gallery-item__image">
+              <img src="{{ $project->image_url }}" alt="{{ $project->title }}" loading="lazy">
+            </div>
+          </button>
+          <div class="gallery-item__content">
+            <span class="gallery-item__category">{{ $categoryLabel }}</span>
+            <h3 class="gallery-item__title">{{ $project->title }}</h3>
+            @if($project->is_featured)
+              <span class="gallery-item__badge">Featured</span>
+            @endif
           </div>
-        </button>
-        <div class="gallery-item__content">
-          <span class="gallery-item__category">Wet Wall</span>
-          <h3 class="gallery-item__title">Contemporary Wet Wall Bathroom</h3>
-        </div>
-      </article>
-
-      <article class="gallery-item" data-category="tiled" data-reveal style="--i:1">
-        <button class="gallery-item__trigger" aria-label="View larger image of Classic Tiled Shower Room">
-          <div class="gallery-item__image">
-            <img src="{{ asset('assets/images/image-2.jpeg') }}" alt="Classic tiled shower room with intricate tile work" loading="lazy">
-          </div>
-        </button>
-        <div class="gallery-item__content">
-          <span class="gallery-item__category">Tiled</span>
-          <h3 class="gallery-item__title">Classic Tiled Shower Room</h3>
-        </div>
-      </article>
-
-      <article class="gallery-item" data-category="wet-wall" data-reveal style="--i:2">
-        <button class="gallery-item__trigger" aria-label="View larger image of Modern Bathroom Renovation">
-          <div class="gallery-item__image">
-            <img src="{{ asset('assets/images/image-3.jpeg') }}" alt="Modern bathroom renovation with wet wall panels" loading="lazy">
-          </div>
-        </button>
-        <div class="gallery-item__content">
-          <span class="gallery-item__category">Wet Wall</span>
-          <h3 class="gallery-item__title">Modern Bathroom Renovation</h3>
-        </div>
-      </article>
-
-      <article class="gallery-item" data-category="tiled" data-reveal style="--i:3">
-        <button class="gallery-item__trigger" aria-label="View larger image of Detailed Tile and Shower Finish">
-          <div class="gallery-item__image">
-            <img src="{{ asset('assets/images/image-4.jpeg') }}" alt="Detailed tile and shower finish with precision tiling" loading="lazy">
-          </div>
-        </button>
-        <div class="gallery-item__content">
-          <span class="gallery-item__category">Tiled</span>
-          <h3 class="gallery-item__title">Detailed Tile and Shower Finish</h3>
-        </div>
-      </article>
-
-      <article class="gallery-item" data-category="shower" data-reveal style="--i:4">
-        <button class="gallery-item__trigger" aria-label="View larger image of Enclosed Shower Installation">
-          <div class="gallery-item__image">
-            <img src="{{ asset('assets/images/image-5.jpeg') }}" alt="Enclosed shower installation with glass enclosure" loading="lazy">
-          </div>
-        </button>
-        <div class="gallery-item__content">
-          <span class="gallery-item__category">Shower Room</span>
-          <h3 class="gallery-item__title">Enclosed Shower Installation</h3>
-        </div>
-      </article>
-
-      <article class="gallery-item" data-category="tiled" data-reveal style="--i:5">
-        <button class="gallery-item__trigger" aria-label="View larger image of Vanity and Mirror Detail">
-          <div class="gallery-item__image">
-            <img src="{{ asset('assets/images/image-6.jpeg') }}" alt="Tiled bathroom with vanity and mirror detail" loading="lazy">
-          </div>
-        </button>
-        <div class="gallery-item__content">
-          <span class="gallery-item__category">Tiled</span>
-          <h3 class="gallery-item__title">Vanity and Mirror Detail</h3>
-        </div>
-      </article>
-
-      <article class="gallery-item" data-category="wet-wall" data-reveal style="--i:6">
-        <button class="gallery-item__trigger" aria-label="View larger image of Family Wet Wall Bathroom">
-          <div class="gallery-item__image">
-            <img src="{{ asset('assets/images/image-7.jpeg') }}" alt="Family wet wall bathroom with spacious design" loading="lazy">
-          </div>
-        </button>
-        <div class="gallery-item__content">
-          <span class="gallery-item__category">Wet Wall</span>
-          <h3 class="gallery-item__title">Family Wet Wall Bathroom</h3>
-        </div>
-      </article>
-
-      <article class="gallery-item" data-category="tiled" data-reveal style="--i:7">
-        <button class="gallery-item__trigger" aria-label="View larger image of Heritage-Style Tiled Bathroom">
-          <div class="gallery-item__image">
-            <img src="{{ asset('assets/images/image-8.jpeg') }}" alt="Heritage-style tiled bathroom with classic design" loading="lazy">
-          </div>
-        </button>
-        <div class="gallery-item__content">
-          <span class="gallery-item__category">Tiled</span>
-          <h3 class="gallery-item__title">Heritage-Style Tiled Bathroom</h3>
-        </div>
-      </article>
-
-      <article class="gallery-item" data-category="shower" data-reveal style="--i:8">
-        <button class="gallery-item__trigger" aria-label="View larger image of Walk-In Shower Wet Wall">
-          <div class="gallery-item__image">
-            <img src="{{ asset('assets/images/image-9.jpeg') }}" alt="Walk-in shower with wet wall panels" loading="lazy">
-          </div>
-        </button>
-        <div class="gallery-item__content">
-          <span class="gallery-item__category">Shower Room</span>
-          <h3 class="gallery-item__title">Walk-In Shower Wet Wall</h3>
-        </div>
-      </article>
-
-      <article class="gallery-item" data-category="wet-wall" data-reveal style="--i:9">
-        <button class="gallery-item__trigger" aria-label="View larger image of Compact Wet Wall Bathroom">
-          <div class="gallery-item__image">
-            <img src="{{ asset('assets/images/image-10.jpeg') }}" alt="Compact wet wall bathroom for smaller spaces" loading="lazy">
-          </div>
-        </button>
-        <div class="gallery-item__content">
-          <span class="gallery-item__category">Wet Wall</span>
-          <h3 class="gallery-item__title">Compact Wet Wall Bathroom</h3>
-        </div>
-      </article>
-
-      <article class="gallery-item" data-category="tiled" data-reveal style="--i:10">
-        <button class="gallery-item__trigger" aria-label="View larger image of Modern Tiled Ensuite">
-          <div class="gallery-item__image">
-            <img src="{{ asset('assets/images/image-11.jpeg') }}" alt="Modern tiled ensuite bathroom" loading="lazy">
-          </div>
-        </button>
-        <div class="gallery-item__content">
-          <span class="gallery-item__category">Tiled</span>
-          <h3 class="gallery-item__title">Modern Tiled Ensuite</h3>
-        </div>
-      </article>
-
-      <article class="gallery-item" data-category="wet-wall" data-reveal style="--i:11">
-        <button class="gallery-item__trigger" aria-label="View larger image of Luxury Wet Wall Finish">
-          <div class="gallery-item__image">
-            <img src="{{ asset('assets/images/image-12.jpeg') }}" alt="Luxury wet wall finish with premium panels" loading="lazy">
-          </div>
-        </button>
-        <div class="gallery-item__content">
-          <span class="gallery-item__category">Wet Wall</span>
-          <h3 class="gallery-item__title">Luxury Wet Wall Finish</h3>
-        </div>
-      </article>
-
-      <article class="gallery-item" data-category="tiled" data-reveal style="--i:12">
-        <button class="gallery-item__trigger" aria-label="View larger image of Feature Wall Tiling">
-          <div class="gallery-item__image">
-            <img src="{{ asset('assets/images/image-13.jpeg') }}" alt="Feature wall tiling with decorative tiles" loading="lazy">
-          </div>
-        </button>
-        <div class="gallery-item__content">
-          <span class="gallery-item__category">Tiled</span>
-          <h3 class="gallery-item__title">Feature Wall Tiling</h3>
-        </div>
-      </article>
-
-      <article class="gallery-item" data-category="wet-wall" data-reveal style="--i:13">
-        <button class="gallery-item__trigger" aria-label="View larger image of Wet Wall Panel Installation">
-          <div class="gallery-item__image">
-            <img src="{{ asset('assets/images/image-14.jpeg') }}" alt="Wet wall panel installation in progress" loading="lazy">
-          </div>
-        </button>
-        <div class="gallery-item__content">
-          <span class="gallery-item__category">Wet Wall</span>
-          <h3 class="gallery-item__title">Wet Wall Panel Installation</h3>
-        </div>
-      </article>
-
-      <article class="gallery-item" data-category="shower" data-reveal style="--i:14">
-        <button class="gallery-item__trigger" aria-label="View larger image of Wet Wall Shower Room">
-          <div class="gallery-item__image">
-            <img src="{{ asset('assets/images/image-15.jpeg') }}" alt="Wet wall shower room with modern fixtures" loading="lazy">
-          </div>
-        </button>
-        <div class="gallery-item__content">
-          <span class="gallery-item__category">Shower Room</span>
-          <h3 class="gallery-item__title">Wet Wall Shower Room</h3>
-        </div>
-      </article>
-
-      <article class="gallery-item" data-category="tiled" data-reveal style="--i:15">
-        <button class="gallery-item__trigger" aria-label="View larger image of Complete Bathroom Transformation">
-          <div class="gallery-item__image">
-            <img src="{{ asset('assets/images/image-16.jpeg') }}" alt="Complete bathroom transformation with tiles" loading="lazy">
-          </div>
-        </button>
-        <div class="gallery-item__content">
-          <span class="gallery-item__category">Tiled</span>
-          <h3 class="gallery-item__title">Complete Bathroom Transformation</h3>
-        </div>
-      </article>
+        </article>
+      @empty
+        <p class="text-center">No projects available at the moment.</p>
+      @endforelse
     </div>
 
     <div class="gallery-empty" data-gallery-empty hidden>
@@ -242,8 +85,8 @@
         <p class="lead">Talk to Robert about your bathroom, compare wet wall and tiled finishes, and get advice on the right solution for your home.</p>
       </div>
       <div class="cta-band__actions">
-        <a class="btn btn--primary" href="tel:+447549348636">Call +44 7549 348636 <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span></a>
-        <a class="btn btn--wa" href="https://wa.me/447549348636?text=Hi%20Robert%2C%20I%E2%80%99d%20like%20to%20talk%20about%20a%20new%20bathroom." target="_blank" rel="noopener">WhatsApp Robert <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg></span></a>
+        <a class="btn btn--primary" href="tel:{{ preg_replace('/[^0-9]/', '', $siteSettings->phone ?? '+447549348636') }}">Call {{ $siteSettings->phone ?? '+44 7549 348636' }} <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span></a>
+        <a class="btn btn--wa" href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings->whatsapp ?? '+447549348636') }}?text=Hi%20Robert%2C%20I%E2%80%99d%20like%20to%20talk%20about%20a%20new%20bathroom." target="_blank" rel="noopener">WhatsApp Robert <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg></span></a>
       </div>
     </div>
   </div>
