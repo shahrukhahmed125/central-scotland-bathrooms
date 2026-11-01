@@ -84,7 +84,8 @@ class ProjectResource extends Resource
                             ->default(0)
                             ->label('Sort Order'),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
     }
 

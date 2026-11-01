@@ -5,6 +5,7 @@ namespace App\Filament\Pages;
 use App\Models\SiteSetting;
 use BackedEnum;
 use Filament\Actions\Action;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Notification;
@@ -36,6 +37,20 @@ class ManageSiteSettings extends Page
         return $schema
             ->components([
                 Form::make([
+                    Section::make('Branding')
+                        ->description('Logo for the admin panel.')
+                        ->schema([
+                            FileUpload::make('logo')
+                                ->label('Admin Logo')
+                                ->image()
+                                ->disk('public')
+                                ->directory('branding')
+                                ->visibility('public')
+                                ->helperText('Upload a logo for the admin panel (recommended size: 200x50px).')
+                                ->columnSpanFull(),
+                        ])
+                        ->columnSpanFull(),
+
                     Section::make('Business Information')
                         ->description('Your company details displayed throughout the website.')
                         ->schema([
@@ -55,10 +70,11 @@ class ManageSiteSettings extends Page
                                 ->email()
                                 ->maxLength(255),
                             Textarea::make('address')
-                                ->rows(3)
+                                ->rows(2)
                                 ->columnSpanFull(),
                         ])
-                        ->columns(2),
+                        ->columns(2)
+                        ->columnSpanFull(),
                     Section::make('Social Media')
                         ->schema([
                             TextInput::make('facebook_url')
@@ -68,14 +84,16 @@ class ManageSiteSettings extends Page
                                 ->label('Instagram URL')
                                 ->url(),
                         ])
-                        ->columns(2),
+                        ->columns(2)
+                        ->columnSpanFull(),
                     Section::make('Footer')
                         ->schema([
                             Textarea::make('footer_text')
                                 ->label('Footer Text')
-                                ->rows(3)
+                                ->rows(2)
                                 ->columnSpanFull(),
-                        ]),
+                        ])
+                        ->columnSpanFull(),
                 ])
                     ->livewireSubmitHandler('save')
                     ->footer([

@@ -23,7 +23,8 @@ class ServiceForm
                     ->schema([
                         TextInput::make('title')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->columnSpan(2),
 
                         TextInput::make('slug')
                             ->required()
@@ -31,18 +32,26 @@ class ServiceForm
                             ->maxLength(255),
 
                         Textarea::make('short_description')
-                            ->rows(3)
+                            ->rows(2)
                             ->maxLength(255)
                             ->columnSpanFull(),
 
                         RichEditor::make('description')
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->toolbarButtons([
+                                'bold',
+                                'italic',
+                                'bulletList',
+                                'orderedList',
+                                'link',
+                            ]),
 
                         FileUpload::make('image')
                             ->image()
                             ->disk('public')
                             ->directory('services')
-                            ->visibility('public'),
+                            ->visibility('public')
+                            ->columnSpanFull(),
 
                         Select::make('icon_type')
                             ->label('Icon Type')
@@ -52,7 +61,8 @@ class ServiceForm
                                 'image' => 'Image',
                             ])
                             ->default('icon')
-                            ->required(),
+                            ->required()
+                            ->live(),
 
                         TextInput::make('icon_name')
                             ->label('Icon Name')
@@ -112,14 +122,17 @@ class ServiceForm
 
                         Toggle::make('is_active')
                             ->label('Active')
-                            ->default(true),
+                            ->default(true)
+                            ->inline(false),
 
                         TextInput::make('sort_order')
+                            ->label('Sort Order')
                             ->numeric()
                             ->integer()
                             ->default(0),
-                ])
-                ->columns(2),
+                    ])
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
     }
 }

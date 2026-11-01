@@ -8,6 +8,7 @@ class SiteSetting extends Model
 {
     protected $fillable = [
         'company_name',
+        'logo',
         'phone',
         'whatsapp',
         'email',

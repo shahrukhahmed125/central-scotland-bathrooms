@@ -17,17 +17,24 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        $siteSettings = \App\Models\SiteSetting::current();
+        $logo = $siteSettings->logo ? Storage::url($siteSettings->logo) : null;
+
         return $panel
             ->default()
             ->id('admin')
             ->path('admin')
             ->login()
+            ->profile()
+            ->brandName($siteSettings->company_name)
+            ->brandLogo($logo)
             ->colors([
                 'primary' => Color::Amber,
             ])

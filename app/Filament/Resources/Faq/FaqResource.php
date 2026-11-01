@@ -62,7 +62,8 @@ class FaqResource extends Resource
                             ->default(0)
                             ->label('Sort Order'),
                     ])
-                    ->columns(1),
+                    ->columns(1)
+                    ->columnSpanFull(),
             ]);
     }
 

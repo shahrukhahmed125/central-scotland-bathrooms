@@ -42,6 +42,9 @@ class NewEnquiryNotification extends Mailable
     {
         return new Content(
             view: 'emails.new-enquiry',
+            with: [
+                'enquiry' => $this->enquiry,
+            ],
         );
     }
 

@@ -98,7 +98,8 @@ class EnquiryResource extends Resource
                             ->disabled()
                             ->hidden(fn (string $operation) => $operation === 'create'),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
     }
 
