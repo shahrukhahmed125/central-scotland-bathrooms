@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ContactContent;
 use App\Models\Enquiry;
 use App\Models\Faq;
 use App\Models\GalleryContent;
@@ -52,7 +53,8 @@ class WebsiteController extends Controller
 
     public function contact()
     {
-        return view('pages.contact');
+        $contactContent = ContactContent::current();
+        return view('pages.contact', compact('contactContent'));
     }
 
     public function storeEnquiry(StoreEnquiryRequest $request)

@@ -1,6 +1,22 @@
 @extends('layouts.app')
 
-@section('title', 'Contact | Scotland Bathrooms')
+@section('title', $contactContent->meta_title ?: 'Contact | Scotland Bathrooms')
+@if(!empty($contactContent->meta_description))
+@section('meta_description', $contactContent->meta_description)
+@endif
+@if(!empty($contactContent->meta_keywords))
+@section('meta_keywords', $contactContent->meta_keywords)
+@endif
+@if(!empty($contactContent->og_title))
+@section('og_title', $contactContent->og_title)
+@endif
+@if(!empty($contactContent->og_description))
+@section('og_description', $contactContent->og_description)
+@endif
+@if(!empty($contactContent->og_image))
+@section('og_image', asset('storage/' . $contactContent->og_image))
+@section('twitter_image', asset('storage/' . $contactContent->og_image))
+@endif
 
 @section('css')
 
@@ -13,8 +29,8 @@
   <div class="container">
     <div class="page-hero__copy">
       <nav aria-label="Breadcrumb"><ol class="crumbs"><li><a href="{{ route('home') }}">Home</a></li><li aria-current="page">Contact</li></ol></nav>
-      <h1 id="page-title">Let’s talk about your bathroom.</h1>
-      <p class="lead">Call, WhatsApp or email Robert, or send your details with the form below.</p>
+      <h1 id="page-title">{{ $contactContent->hero_title }}</h1>
+      <p class="lead">{{ $contactContent->hero_lead }}</p>
     </div>
   </div>
 </section>
@@ -22,7 +38,7 @@
 <section class="section contact" aria-label="Ways to get in touch">
   <div class="container contact__grid">
     <div class="contact__side" data-reveal>
-      <h2>Talk to Robert directly</h2>
+      <h2>{{ $contactContent->direct_title }}</h2>
       <ul class="channels">
         <li><a class="channel channel--call" href="tel:{{ preg_replace('/[^0-9]/', '', $siteSettings->phone ?? '+447549348636') }}"><span class="channel__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span><span class="channel__text"><span class="channel__label">Call</span><span class="channel__value">{{ $siteSettings->phone ?? '+44 7549 348636' }}</span></span><svg class="icon channel__go" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></li>
         <li><a class="channel channel--wa" href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings->whatsapp ?? '+447549348636') }}?text=Hi%20Robert%2C%20I%E2%80%99d%20like%20to%20talk%20about%20a%20new%20bathroom." target="_blank" rel="noopener"><span class="channel__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg></span><span class="channel__text"><span class="channel__label">WhatsApp</span><span class="channel__value">WhatsApp Robert</span></span><svg class="icon channel__go" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></li>
@@ -30,14 +46,14 @@
       </ul>
       <div class="area">
         <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pin"/></svg>
-        <p><strong>We cover Central Scotland.</strong> Not sure if that includes you? Send your town or postcode and Robert will confirm.</p>
+        <p><strong>{{ $contactContent->coverage_title }}</strong> {{ $contactContent->coverage_text }}</p>
       </div>
     </div>
 
     <div class="form-card bezel" id="quote" data-reveal style="--i:1">
       <div class="bezel__core">
-        <h2>Ask for a quote</h2>
-        <p class="form-card__intro">Fill in a few details and we'll be in touch to discuss your bathroom project.</p>
+        <h2>{{ $contactContent->form_title }}</h2>
+        <p class="form-card__intro">{{ $contactContent->form_lead }}</p>
         <form class="form" action="{{ route('contact.submit') }}" method="POST" data-enquiry novalidate>
           @csrf
           <input type="text" name="website" style="display:none;" tabindex="-1" autocomplete="off">
@@ -91,7 +107,7 @@
           <div class="form__actions">
             <button class="btn btn--primary" type="submit">Send enquiry <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg></span></button>
           </div>
-          <p class="form__note">Prefer to call or message directly? Use the contact options above.</p>
+          <p class="form__note">{{ $contactContent->form_note }}</p>
         </form>
       </div>
     </div>
