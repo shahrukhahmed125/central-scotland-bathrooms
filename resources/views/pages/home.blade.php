@@ -1,6 +1,22 @@
 @extends('layouts.app')
 
-@section('title', 'Home | Scotland Bathrooms')
+@section('title', $homepageContent->meta_title ?: 'Home | Scotland Bathrooms')
+@if(!empty($homepageContent->meta_description))
+@section('meta_description', $homepageContent->meta_description)
+@endif
+@if(!empty($homepageContent->meta_keywords))
+@section('meta_keywords', $homepageContent->meta_keywords)
+@endif
+@if(!empty($homepageContent->og_title))
+@section('og_title', $homepageContent->og_title)
+@endif
+@if(!empty($homepageContent->og_description))
+@section('og_description', $homepageContent->og_description)
+@endif
+@if(!empty($homepageContent->og_image))
+@section('og_image', asset('storage/' . $homepageContent->og_image))
+@section('twitter_image', asset('storage/' . $homepageContent->og_image))
+@endif
 
 @section('css')
 
@@ -12,8 +28,8 @@
 <section class="hero on-dark" aria-labelledby="hero-title">
   <div class="container hero__grid">
     <div class="hero__copy">
-      <h1 class="hero__title" id="hero-title" style="--i:0">A new bathroom, without the worry.</h1>
-      <p class="lead hero__lead" style="--i:1">Wet wall and tiled bathrooms across Central Scotland. Daily updates from Robert, and you pay the fitting once you’re happy.</p>
+      <h1 class="hero__title" id="hero-title" style="--i:0">{{ $homepageContent->hero_title }}</h1>
+      <p class="lead hero__lead" style="--i:1">{{ $homepageContent->hero_lead }}</p>
       <div class="btn-row hero__actions" style="--i:2">
         <a class="btn btn--primary" href="tel:{{ $siteSettings->phone ?? '+447549348636' }}">Call {{ $siteSettings->phone ?? '+44 7549 348636' }} <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span></a>
         <a class="btn btn--ghost" href="{{ route('services') }}">Our services <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></span></a>
@@ -84,8 +100,8 @@
 <section class="section day" aria-labelledby="day-title">
   <div class="container">
     <div class="section-head section-head--center" data-reveal>
-      <h2 id="day-title">You’ll hear from us every day of your job.</h2>
-      <p class="lead">Robert stays in touch from the first morning to the last, so you always know where your bathroom’s at.</p>
+      <h2 id="day-title">{{ $homepageContent->day_title }}</h2>
+      <p class="lead">{{ $homepageContent->day_lead }}</p>
     </div>
     <div class="day__sky" data-reveal>
       <div class="arc" aria-hidden="true">
@@ -97,24 +113,16 @@
         <span class="arc__arm"><span class="arc__sun"></span></span>
       </div>
       <ol class="stops">
-        <li class="stop">
-          <span class="stop__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg></span>
-          <span class="stop__when">Every morning</span>
-          <h3>A call to plan the day</h3>
-          <p>Robert rings to tell you what’s happening in your bathroom that day.</p>
-        </li>
-        <li class="stop">
-          <span class="stop__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-home"/></svg></span>
-          <span class="stop__when">Once a day</span>
-          <h3>A visit to check the work</h3>
-          <p>He pops in to see the job and answer your questions face to face.</p>
-        </li>
-        <li class="stop">
-          <span class="stop__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-sunset"/></svg></span>
-          <span class="stop__when">End of the day</span>
-          <h3>A call to sum up</h3>
-          <p>You hear what got done today and what’s planned for tomorrow.</p>
-        </li>
+        @if(!empty($homepageContent->day_stops) && is_array($homepageContent->day_stops))
+          @foreach($homepageContent->day_stops as $stop)
+            <li class="stop">
+              <span class="stop__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-{{ $stop['icon'] ?? 'sun' }}"/></svg></span>
+              <span class="stop__when">{{ $stop['when'] ?? '' }}</span>
+              <h3>{{ $stop['title'] ?? '' }}</h3>
+              <p>{{ $stop['description'] ?? '' }}</p>
+            </li>
+          @endforeach
+        @endif
       </ol>
     </div>
   </div>
@@ -123,16 +131,18 @@
 <section class="section promise" aria-labelledby="promise-title">
   <div class="container promise__grid">
     <p class="promise__figure" data-reveal>
-      <span class="promise__amount">£0</span>
-      <span class="promise__caption">fitting cost to pay until you’re happy with the whole job</span>
+      <span class="promise__amount">{{ $homepageContent->promise_amount ?? '£0' }}</span>
+      <span class="promise__caption">{{ $homepageContent->promise_caption ?? 'fitting cost to pay until you’re happy with the whole job' }}</span>
     </p>
     <div class="promise__copy" data-reveal style="--i:1">
-      <h2 id="promise-title">You pay the fitting cost once you’re happy.</h2>
-      <p class="lead">Check the finished bathroom first. If anything isn’t right, we put it right before you pay for the fitting.</p>
+      <h2 id="promise-title">{{ $homepageContent->promise_title ?? 'You pay the fitting cost once you’re happy.' }}</h2>
+      <p class="lead">{{ $homepageContent->promise_lead ?? 'Check the finished bathroom first. If anything isn’t right, we put it right before you pay for the fitting.' }}</p>
       <ul class="promise__list">
-        <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Goods from trusted, well-known brands</li>
-        <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Fitted to a high standard</li>
-        <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>All the rubbish taken away</li>
+        @if(!empty($homepageContent->promise_list) && is_array($homepageContent->promise_list))
+          @foreach($homepageContent->promise_list as $item)
+            <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>{{ is_array($item) ? ($item['item'] ?? '') : $item }}</li>
+          @endforeach
+        @endif
       </ul>
     </div>
   </div>
@@ -141,8 +151,8 @@
 <section class="section walls" aria-labelledby="walls-title">
   <div class="container">
     <div class="section-head" data-reveal>
-      <h2 id="walls-title">Wet wall or tiles? Compare them on one wall.</h2>
-      <p class="lead">Drag the handle to see both finishes. We fit either, and Robert can help you choose what suits your bathroom.</p>
+      <h2 id="walls-title">{{ $homepageContent->walls_title ?? 'Wet wall or tiles? Compare them on one wall.' }}</h2>
+      <p class="lead">{{ $homepageContent->walls_lead ?? 'Drag the handle to see both finishes. We fit either, and Robert can help you choose what suits your bathroom.' }}</p>
     </div>
     <div class="compare" data-compare data-reveal>
       <div class="compare__labels" aria-hidden="true"><span><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-tiles"/></svg>Tiles</span><span>Wet wall panels<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-panel"/></svg></span></div>
@@ -158,19 +168,23 @@
     </div>
     <div class="compare__notes">
       <div data-reveal>
-        <h3><span class="swatch swatch--tile" aria-hidden="true"></span>Tiled walls</h3>
+        <h3><span class="swatch swatch--tile" aria-hidden="true"></span>{{ $homepageContent->tiles_title ?? 'Tiled walls' }}</h3>
         <ul class="ticks">
-          <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>A wide choice of colour, size and pattern</li>
-          <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>A classic, hand-laid finish</li>
-          <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Ideal for feature walls, borders and alcoves</li>
+          @if(!empty($homepageContent->tiles_list) && is_array($homepageContent->tiles_list))
+            @foreach($homepageContent->tiles_list as $item)
+              <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>{{ is_array($item) ? ($item['item'] ?? '') : $item }}</li>
+            @endforeach
+          @endif
         </ul>
       </div>
       <div data-reveal style="--i:1">
-        <h3><span class="swatch swatch--panel" aria-hidden="true"></span>Wet wall panels</h3>
+        <h3><span class="swatch swatch--panel" aria-hidden="true"></span>{{ $homepageContent->panels_title ?? 'Wet wall panels' }}</h3>
         <ul class="ticks">
-          <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Large waterproof panels with very few joints</li>
-          <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>No grout lines to scrub or reseal</li>
-          <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Usually faster to fit than tiles</li>
+          @if(!empty($homepageContent->panels_list) && is_array($homepageContent->panels_list))
+            @foreach($homepageContent->panels_list as $item)
+              <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>{{ is_array($item) ? ($item['item'] ?? '') : $item }}</li>
+            @endforeach
+          @endif
         </ul>
       </div>
     </div>
@@ -180,30 +194,27 @@
 <section class="section process" aria-labelledby="process-title">
   <div class="container">
     <div class="section-head" data-reveal>
-      <h2 id="process-title">One team, from <span class="nowrap">strip-out</span> to <span class="nowrap">sign-off</span>.</h2>
-      <p class="lead">Every job follows the same four steps, and you hear from Robert at each one.</p>
+      <h2 id="process-title">{{ $homepageContent->process_title ?? 'One team, from strip-out to sign-off.' }}</h2>
+      <p class="lead">{{ $homepageContent->process_lead ?? 'Every job follows the same four steps, and you hear from Robert at each one.' }}</p>
     </div>
     <ol class="steps" data-reveal>
-      <li class="step" style="--tile:var(--teal-800)">
-        <span class="step__tile"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-strip"/></svg></span>
-        <h3>Strip out</h3>
-        <p>We remove your old bathroom so the new one starts from a clean slate.</p>
-      </li>
-      <li class="step" style="--tile:var(--teal-700)">
-        <span class="step__tile"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-wrench"/></svg></span>
-        <h3>Fit</h3>
-        <p>We fit your new bathroom to a high standard, using goods from trusted brands.</p>
-      </li>
-      <li class="step" style="--tile:var(--teal-600)">
-        <span class="step__tile"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-van"/></svg></span>
-        <h3>Clear away</h3>
-        <p>We take all the rubbish away, so there’s nothing left for you to deal with.</p>
-      </li>
-      <li class="step" style="--tile:var(--coral-500);--tile-fg:var(--ink-900)">
-        <span class="step__tile"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-thumb"/></svg></span>
-        <h3>Sign off</h3>
-        <p>You check the finished job, then pay the fitting cost once you’re happy.</p>
-      </li>
+      @php
+        $stepTileStyles = [
+          0 => '--tile:var(--teal-800)',
+          1 => '--tile:var(--teal-700)',
+          2 => '--tile:var(--teal-600)',
+          3 => '--tile:var(--coral-500);--tile-fg:var(--ink-900)',
+        ];
+      @endphp
+      @if(!empty($homepageContent->process_steps) && is_array($homepageContent->process_steps))
+        @foreach($homepageContent->process_steps as $idx => $step)
+          <li class="step" style="{{ $stepTileStyles[$idx] ?? '--tile:var(--teal-700)' }}">
+            <span class="step__tile"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-{{ $step['icon'] ?? 'wrench' }}"/></svg></span>
+            <h3>{{ $step['title'] ?? '' }}</h3>
+            <p>{{ $step['description'] ?? '' }}</p>
+          </li>
+        @endforeach
+      @endif
     </ol>
   </div>
 </section>
@@ -213,8 +224,18 @@
     <div class="cta-band on-dark" data-reveal>
       <svg class="cta-band__art" viewBox="0 0 400 240" aria-hidden="true" focusable="false"><rect width="400" height="240" fill="#d6e8e3"/><rect class="bt" x="1.5" y="1.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:170"/><rect class="bt" x="41.5" y="1.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:192"/><rect class="bt" x="81.5" y="1.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:214"/><rect class="bt" x="121.5" y="1.5" width="37" height="37" rx="3" fill="#24918A" style="--d:236"/><rect class="bt" x="161.5" y="1.5" width="37" height="37" rx="3" fill="#1A6E68" style="--d:258"/><rect class="bt" x="201.5" y="1.5" width="37" height="37" rx="3" fill="#24918A" style="--d:280"/><rect class="bt" x="241.5" y="1.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:302"/><rect class="bt" x="281.5" y="1.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:324"/><rect class="bt" x="321.5" y="1.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:346"/><rect class="bt" x="361.5" y="1.5" width="37" height="37" rx="3" fill="#24918A" style="--d:368"/><rect class="bt" x="1.5" y="41.5" width="37" height="37" rx="3" fill="#3AA99C" style="--d:136"/><rect class="bt" x="41.5" y="41.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:158"/><rect class="bt" x="81.5" y="41.5" width="37" height="37" rx="3" fill="#24918A" style="--d:180"/><rect class="bt" x="121.5" y="41.5" width="37" height="37" rx="3" fill="#2C9C92" style="--d:202"/><rect class="bt" x="161.5" y="41.5" width="37" height="37" rx="3" fill="#24918A" style="--d:224"/><rect class="bt" x="201.5" y="41.5" width="37" height="37" rx="3" fill="#24918A" style="--d:246"/><rect class="bt" x="241.5" y="41.5" width="37" height="37" rx="3" fill="#1A6E68" style="--d:268"/><rect class="bt" x="281.5" y="41.5" width="37" height="37" rx="3" fill="#2C9C92" style="--d:290"/><rect class="bt" x="321.5" y="41.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:312"/><rect class="bt" x="361.5" y="41.5" width="37" height="37" rx="3" fill="#24918A" style="--d:334"/><rect class="bt" x="1.5" y="81.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:102"/><rect class="bt" x="41.5" y="81.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:124"/><rect class="bt" x="81.5" y="81.5" width="37" height="37" rx="3" fill="#3AA99C" style="--d:146"/><rect class="bt" x="121.5" y="81.5" width="37" height="37" rx="3" fill="#24918A" style="--d:168"/><rect class="bt" x="161.5" y="81.5" width="37" height="37" rx="3" fill="#24918A" style="--d:190"/><rect class="bt" x="201.5" y="81.5" width="37" height="37" rx="3" fill="#1A6E68" style="--d:212"/><rect class="bt" x="241.5" y="81.5" width="37" height="37" rx="3" fill="#9AD6CA" style="--d:234"/><rect class="bt" x="281.5" y="81.5" width="37" height="37" rx="3" fill="#1A6E68" style="--d:256"/><rect class="bt" x="321.5" y="81.5" width="37" height="37" rx="3" fill="#3AA99C" style="--d:278"/><rect class="bt" x="361.5" y="81.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:300"/><rect class="bt" x="1.5" y="121.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:68"/><rect class="bt" x="41.5" y="121.5" width="37" height="37" rx="3" fill="#24918A" style="--d:90"/><rect class="bt" x="81.5" y="121.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:112"/><rect class="bt" x="121.5" y="121.5" width="37" height="37" rx="3" fill="#24918A" style="--d:134"/><rect class="bt" x="161.5" y="121.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:156"/><rect class="bt" x="201.5" y="121.5" width="37" height="37" rx="3" fill="#2C9C92" style="--d:178"/><rect class="bt" x="241.5" y="121.5" width="37" height="37" rx="3" fill="#2C9C92" style="--d:200"/><rect class="bt" x="281.5" y="121.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:222"/><rect class="bt" x="321.5" y="121.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:244"/><rect class="bt" x="361.5" y="121.5" width="37" height="37" rx="3" fill="#9AD6CA" style="--d:266"/><rect class="bt" x="1.5" y="161.5" width="37" height="37" rx="3" fill="#24918A" style="--d:34"/><rect class="bt" x="41.5" y="161.5" width="37" height="37" rx="3" fill="#2C9C92" style="--d:56"/><rect class="bt" x="81.5" y="161.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:78"/><rect class="bt" x="121.5" y="161.5" width="37" height="37" rx="3" fill="#1A6E68" style="--d:100"/><rect class="bt" x="161.5" y="161.5" width="37" height="37" rx="3" fill="#2C9C92" style="--d:122"/><rect class="bt" x="201.5" y="161.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:144"/><rect class="bt" x="241.5" y="161.5" width="37" height="37" rx="3" fill="#3AA99C" style="--d:166"/><rect class="bt" x="281.5" y="161.5" width="37" height="37" rx="3" fill="#1A6E68" style="--d:188"/><rect class="bt" x="321.5" y="161.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:210"/><rect class="bt" x="361.5" y="161.5" width="37" height="37" rx="3" fill="#24918A" style="--d:232"/><rect class="bt" x="1.5" y="201.5" width="37" height="37" rx="3" fill="#24918A" style="--d:0"/><rect class="bt" x="41.5" y="201.5" width="37" height="37" rx="3" fill="#2C9C92" style="--d:22"/><rect class="bt" x="81.5" y="201.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:44"/><rect class="bt" x="121.5" y="201.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:66"/><rect class="bt" x="161.5" y="201.5" width="37" height="37" rx="3" fill="#1A6E68" style="--d:88"/><rect class="bt" x="201.5" y="201.5" width="37" height="37" rx="3" fill="#4DB3A6" style="--d:110"/><rect class="bt" x="241.5" y="201.5" width="37" height="37" rx="3" fill="#7FCABD" style="--d:132"/><rect class="bt" x="281.5" y="201.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:154"/><rect class="bt" x="321.5" y="201.5" width="37" height="37" rx="3" fill="#9AD6CA" style="--d:176"/><rect class="bt" x="361.5" y="201.5" width="37" height="37" rx="3" fill="#1F7F76" style="--d:198"/></svg>
       <div class="cta-band__copy">
-        <h2 id="cta-title">Talk to Robert about your bathroom.</h2>
-        <p class="lead">Fitting wet wall and tiled bathrooms across Central Scotland since <span class="since" data-count="2019" data-from="1989">2019</span>.</p>
+        <h2 id="cta-title">{{ $homepageContent->cta_title ?? 'Talk to Robert about your bathroom.' }}</h2>
+        @php
+          $sinceYear = $homepageContent->since_year ?? 2019;
+          $ctaLead = $homepageContent->cta_lead ?? 'Fitting wet wall and tiled bathrooms across Central Scotland since ' . $sinceYear . '.';
+          $sinceBadge = '<span class="since" data-count="' . e($sinceYear) . '" data-from="1989">' . e($sinceYear) . '</span>';
+          if (str_contains($ctaLead, (string)$sinceYear)) {
+              $ctaLeadHtml = str_replace((string)$sinceYear, $sinceBadge, e($ctaLead));
+          } else {
+              $ctaLeadHtml = e($ctaLead) . ' ' . $sinceBadge;
+          }
+        @endphp
+        <p class="lead">{!! $ctaLeadHtml !!}</p>
       </div>
       <div class="cta-band__actions">
         <a class="btn btn--primary" href="tel:{{ $siteSettings->phone ?? '+447549348636' }}">Call {{ $siteSettings->phone ?? '+44 7549 348636' }} <span class="btn__bubble"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span></a>

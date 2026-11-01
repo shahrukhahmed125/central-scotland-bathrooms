@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Enquiry;
 use App\Models\Faq;
+use App\Models\HomepageContent;
 use App\Models\Project;
 use App\Models\Service;
 use App\Models\SiteSetting;
@@ -16,7 +17,8 @@ class WebsiteController extends Controller
 {
     public function home()
     {
-        return view('pages.home');
+        $homepageContent = HomepageContent::current();
+        return view('pages.home', compact('homepageContent'));
     }
 
     public function services()

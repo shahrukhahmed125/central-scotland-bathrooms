@@ -4,25 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>@yield('title', 'Bathroom Fitters in Central Scotland | Central Scotland Bathroom Consultancy')</title>
-<meta name="description" content="Wet wall and tiled bathroom refits across Central Scotland since 2019. Daily updates from Robert, all rubbish taken away, and you pay the fitting once you’re happy.">
-<link rel="canonical" href="https://centralscotlandbathrooms.co.uk/">
+<meta name="description" content="@yield('meta_description', 'Wet wall and tiled bathroom refits across Central Scotland since 2019. Daily updates from Robert, all rubbish taken away, and you pay the fitting once you’re happy.')">
+@hasSection('meta_keywords')
+<meta name="keywords" content="@yield('meta_keywords')">
+@endif
+<link rel="canonical" href="@yield('canonical_url', url()->current())">
 <meta name="theme-color" content="#0e4743" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0d403c" media="(prefers-color-scheme: dark)">
 <meta name="color-scheme" content="light dark">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Central Scotland Bathroom Consultancy">
+<meta property="og:type" content="@yield('og_type', 'website')">
+<meta property="og:site_name" content="{{ $siteSettings->company_name ?? 'Central Scotland Bathroom Consultancy' }}">
 <meta property="og:locale" content="en_GB">
-<meta property="og:title" content="A new bathroom, without the worry">
-<meta property="og:description" content="Wet wall and tiled bathrooms across Central Scotland. Daily updates from Robert, and you pay the fitting once you’re happy.">
-<meta property="og:url" content="https://centralscotlandbathrooms.co.uk/">
-<meta property="og:image" content="https://centralscotlandbathrooms.co.uk/images/og-image.png">
+<meta property="og:title" content="@yield('og_title', 'A new bathroom, without the worry')">
+<meta property="og:description" content="@yield('og_description', 'Wet wall and tiled bathrooms across Central Scotland. Daily updates from Robert, and you pay the fitting once you’re happy.')">
+<meta property="og:url" content="@yield('og_url', url()->current())">
+<meta property="og:image" content="@yield('og_image', asset('assets/images/og-image.png'))">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Central Scotland Bathroom Consultancy: wet wall and tiled bathrooms, with a teal tiled wall and coral roll-top bath">
+<meta property="og:image:alt" content="@yield('og_image_alt', 'Central Scotland Bathroom Consultancy: wet wall and tiled bathrooms, with a teal tiled wall and coral roll-top bath')">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="A new bathroom, without the worry">
-<meta name="twitter:description" content="Wet wall and tiled bathrooms across Central Scotland. Daily updates from Robert, and you pay the fitting once you’re happy.">
-<meta name="twitter:image" content="https://centralscotlandbathrooms.co.uk/images/og-image.png">
+<meta name="twitter:title" content="@yield('twitter_title', View::getSection('og_title') ?? 'A new bathroom, without the worry')">
+<meta name="twitter:description" content="@yield('twitter_description', View::getSection('og_description') ?? 'Wet wall and tiled bathrooms across Central Scotland. Daily updates from Robert, and you pay the fitting once you’re happy.')">
+<meta name="twitter:image" content="@yield('twitter_image', View::getSection('og_image') ?? asset('assets/images/og-image.png'))">
 <link rel="icon" href="{{ asset('assets/favicon.ico') }}" sizes="32x32">
 <link rel="icon" href="{{ asset('assets/favicon.svg') }}" type="image/svg+xml">
 <link rel="apple-touch-icon" href="{{ asset('assets/apple-touch-icon.png') }}">
