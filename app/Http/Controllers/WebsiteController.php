@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Enquiry;
 use App\Models\Faq;
+use App\Models\GalleryContent;
 use App\Models\HomepageContent;
 use App\Models\Project;
 use App\Models\Service;
@@ -44,7 +45,9 @@ class WebsiteController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        return view('pages.gallery', compact('projects'));
+        $galleryContent = GalleryContent::current();
+
+        return view('pages.gallery', compact('projects', 'galleryContent'));
     }
 
     public function contact()
